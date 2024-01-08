@@ -12,69 +12,64 @@ const BreedList = ({ dispatchBreedChange }) => {
     setValue(e.target.value);
 
     if(dispatchBreedChange) {
-      dispatchBreedChange(e.target.value)
+      dispatchBreedChange(e.target.value);
     }
-  }
+  };
 
   const handlePageClick = newPageNumber => {
-    if(newPageNumber < 0 || newPageNumber >= totalPages){
+    if(newPageNumber < 0 || newPageNumber >= totalPages) {
       return;
     }
 
-    setCurrentPage(newPageNumber)
-  }
+    setCurrentPage(newPageNumber);
+  };
 
   useEffect(() => {
-     const loadBreeds = async () => {
+    const loadBreeds = async () => {
       setIsLoading(loading => !loading);
       const breedsData = await fetchBreeds(currentPage, 15);
       setBreeds(breedsData.breeds);
-      setTotalPages(parseInt(Math.ceil(breedsData.totalBreeds / 15), 10));
+      setTotalPages(parseInt(Math.ceil(breedsData.totalBreeds / 15),10));
       setIsLoading(loading => !loading);
-     }
-     loadBreeds();
-  }, [currentPage])
-  return (
-    <>
-      {isLoading && (
-        <progress className = 'progress is-medium is-link' max = '100'>
-          60%
-        </progress>
-      )}
-      {
-        !isLoading && (
-          <>
-            <div className = 'field breed-list'>
-              <div className = 'control'>
-                {breeds.map(breed => (
-                  <label className = 'radio' key = {breed.id}>
-                    <input
-                      type = 'radio'
-                      name = 'breed'
-                      checked = {value === breed.id.toString()}
-                      value = {breed.id}
-                      onChange={handleChange}
-                    />
-                    {breed.name}
-                  </label>
-                ))}
-              </div>
-            </div>
-            <br />
-            <nav className='pagination is-rounded' role = 'navigation' aria-label='pagination'>
-              <a className='pagination-previous' onClick={() => handlePageClick(currentPage - 1)} disabled = {currentPage <= 0}>
-                Previous
-              </a>
-              <a className='pagination-previous' onClick={() => handlePageClick(currentPage + 1)} disable = {currentPage + 1 >= totalPages}>
-                Next Page
-              </a>
+    };
 
-            </nav>
-          </>
-        )
-      }
-    </>
-  )
+    loadBreeds();
+  }, [currentPage]);
+
+  return (
+      <>
+        {isLoading && (
+            <progress className='progress is-medium is-link' max='100'>
+              60%
+            </progress>
+        )}
+        {
+          !isLoading && (
+            <>
+              <div className='field breed-list'>
+                <div className='control'>
+                  {breeds.map(breed => (
+                      <label className='radio' key={breed.id}>
+                        <input type="radio" name="breed" checked={value === breed.id.toString()} value={breed.id} onChange={handleChange} />
+                        {breed.name}
+                      </label>
+                  ))}
+                </div>
+              </div>
+              <br />
+              <nav className="pagination is-rounded" role="navigation" aria-label="pagination">
+                <a className="pagination-previous" onClick={() => handlePageClick(currentPage - 1)} disabled={currentPage <= 0}>
+                  Previous
+                </a>
+                <a className="pagination-previous" onClick={() => handlePageClick(currentPage + 1)} disabled={currentPage + 1 >= totalPages}>
+                  Next page
+                </a>
+              </nav>
+            </>
+          )
+        }
+      </>
+  );
 }
 
 
